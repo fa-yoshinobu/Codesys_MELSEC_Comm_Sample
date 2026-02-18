@@ -1,4 +1,4 @@
-﻿# codesys_melsec
+﻿# Codesys_MELSEC_Comm_Sample
 
 MELSEC SLMP (TCP/UDP) client sample for CODESYS (Raspberry Pi runtime).
 
