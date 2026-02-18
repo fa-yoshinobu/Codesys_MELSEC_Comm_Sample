@@ -1,0 +1,58 @@
+SLMP Device -> Default SubCommand Map
+
+[SubCommand Definitions]
+- SLMP_SUB_WORD  = 16#0000
+- SLMP_SUB_BIT   = 16#0001
+- SLMP_SUB_WORD2 = 16#0002
+- SLMP_SUB_BIT2  = 16#0003
+
+[Device Default Mapping]
+- SM   -> SLMP_SUB_BIT
+- SD   -> SLMP_SUB_WORD
+- X    -> SLMP_SUB_BIT
+- Y    -> SLMP_SUB_BIT
+- M    -> SLMP_SUB_BIT
+- L    -> SLMP_SUB_BIT
+- F    -> SLMP_SUB_BIT
+- V    -> SLMP_SUB_BIT
+- B    -> SLMP_SUB_BIT
+- D    -> SLMP_SUB_WORD
+- W    -> SLMP_SUB_WORD
+- TS   -> SLMP_SUB_BIT
+- TC   -> SLMP_SUB_BIT
+- TN   -> SLMP_SUB_WORD
+- LTS  -> SLMP_SUB_BIT2
+- LTC  -> SLMP_SUB_BIT2
+- LTN  -> SLMP_SUB_WORD2
+- STS  -> SLMP_SUB_BIT
+- STC  -> SLMP_SUB_BIT
+- STN  -> SLMP_SUB_WORD
+- LSTS -> SLMP_SUB_BIT2
+- LSTC -> SLMP_SUB_BIT2
+- LSTN -> SLMP_SUB_WORD2
+- CS   -> SLMP_SUB_BIT
+- CC   -> SLMP_SUB_BIT
+- CN   -> SLMP_SUB_WORD
+- LCS  -> SLMP_SUB_BIT2
+- LCC  -> SLMP_SUB_BIT2
+- LCN  -> SLMP_SUB_WORD
+- SB   -> SLMP_SUB_BIT
+- SW   -> SLMP_SUB_WORD
+- S    -> SLMP_SUB_BIT
+- DX   -> SLMP_SUB_BIT
+- DY   -> SLMP_SUB_BIT
+- Z    -> SLMP_SUB_WORD
+- LZ   -> SLMP_SUB_WORD2
+- R    -> SLMP_SUB_WORD
+- ZR   -> SLMP_SUB_WORD
+- RD   -> SLMP_SUB_WORD2
+
+[Source]
+- src/SLMP_Function/GVL_SlmpSubCommand.st
+- src/SLMP_Function/GVL_SlmpSubCommandByDevice.st
+
+[Bit Packing Note]
+- Bit payload packing order must match decode order.
+- Implementation pair:
+  - src/SLMP_Function/FB_SlmpWriteDevice.BuildBitPayload.st
+  - src/SLMP_Function/FB_SlmpReadDevice.DecodeBitArray.st

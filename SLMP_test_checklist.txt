@@ -1,0 +1,42 @@
+SLMP動作確認チェックリスト (CODESYS Raspberry Pi <-> MELSEC)
+
+[事前設定]
+[ ] MELSEC側でSLMP(TCP)が有効化されている
+[ ] ポート番号が5000 (または設定値) になっている
+[ ] CODESYS側IPとMELSEC側IPが同一ネットワークで疎通できる (ping)
+[ ] ファイアウォールでTCP 5000が遮断されていない
+
+[CODESYS側]
+[ ] SysSocketライブラリ参照が解決され、ビルドエラーがない
+[ ] xReadTrig / xWriteTrig を1スキャンだけTRUEにして起動している
+[ ] 実行時に xBusy -> xDone で完了し、xError=FALSE になっている
+[ ] diError が0以上のとき F_SlmpEndCodeText のメッセージを確認した
+[ ] diError が負値のときローカル通信エラーとして原因を切り分けた
+
+[読出し確認]
+[ ] udiHeadDevNo と uiPoints が有効範囲のデバイスになっている
+[ ] uiReadWords が期待値と一致している
+[ ] aValues[0] がMELSECの対象D値と一致している
+[ ] uiPoints > 1 で連続ワードが正しく読めている
+
+[書込み確認]
+[ ] 書込み先Dデバイスが保護対象ではない
+[ ] aWriteValues に設定した値がMELSEC側Dに反映される
+[ ] 書込み後に読出しして、値一致を確認した
+
+[異常系確認]
+[ ] IP誤設定で接続失敗エラー (-1002 / -2002 系) を確認した
+[ ] ケーブル断/ポート遮断でタイムアウト (-1010 / -2010) を確認した
+[ ] uiRetryMax 回だけ再試行し、超過後 xError=TRUE で停止することを確認した
+
+[任意(推奨)]
+[ ] Wiresharkで tcp.port==5000 を監視した
+[ ] 0401(読出し) / 1401(書込み) フレームを確認した
+
+[記録欄]
+- 実施日:
+- 実施者:
+- MELSEC機種/CPU:
+- CODESYS Runtime:
+- 結果:
+- 備考:

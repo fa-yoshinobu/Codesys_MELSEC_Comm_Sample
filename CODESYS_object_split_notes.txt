@@ -1,0 +1,86 @@
+CODESYS object split notes (current structure)
+
+1) Create DUT first
+- SOCKADDRESS_IN
+  source: src/SLMP_Function/SOCKADDRESS_IN.st
+
+2) Create utility functions / GVL
+- F_SlmpAutoSubCommand           (src/SLMP_Function/F_SlmpAutoSubCommand.st)
+- F_SlmpResolveSubCommand        (src/SLMP_Function/F_SlmpResolveSubCommand.st)
+- F_SlmpIsBitSubCommand          (src/SLMP_Function/F_SlmpIsBitSubCommand.st)
+- F_SlmpClampPoints              (src/SLMP_Function/F_SlmpClampPoints.st)
+- F_SlmpNextSerialNo             (src/SLMP_Function/F_SlmpNextSerialNo.st)
+- F_SlmpEndCodeText              (src/SLMP_Function/F_SlmpEndCodeText.st)
+- GVL_SlmpDeviceCode             (src/SLMP_Function/GVL_SlmpDeviceCode.st)
+- GVL_SlmpSubCommand             (src/SLMP_Function/GVL_SlmpSubCommand.st)
+- GVL_SlmpSubCommandByDevice     (src/SLMP_Function/GVL_SlmpSubCommandByDevice.st)
+- GVL_SlmpRuntime                (src/SLMP_Function/GVL_SlmpRuntime.st)
+- GVL_SlmpCoreShared             (src/SLMP_Function/GVL_SlmpCoreShared.st)
+
+3) Create FB_SlmpCore
+- FB: FB_SlmpCore
+  source: src/SLMP_Function/FB_SlmpCore.st
+- Methods under FB_SlmpCore:
+  - OpenAndConnect (src/SLMP_Function/FB_SlmpCore.OpenAndConnect.st)
+  - SendBytes      (src/SLMP_Function/FB_SlmpCore.SendBytes.st)
+  - RecvBytes      (src/SLMP_Function/FB_SlmpCore.RecvBytes.st)
+  - CloseSocket    (src/SLMP_Function/FB_SlmpCore.CloseSocket.st)
+
+4) Create FB_SlmpReadDevice
+- FB: FB_SlmpReadDevice
+  source: src/SLMP_Function/FB_SlmpReadDevice.st
+- Methods under FB_SlmpReadDevice:
+  - CalcNeedRxLen  (src/SLMP_Function/FB_SlmpReadDevice.CalcNeedRxLen.st)
+  - DecodeReadData (src/SLMP_Function/FB_SlmpReadDevice.DecodeReadData.st)
+  - DecodeBitArray (src/SLMP_Function/FB_SlmpReadDevice.DecodeBitArray.st)
+  - DecodeWordArray(src/SLMP_Function/FB_SlmpReadDevice.DecodeWordArray.st)
+
+4.1) Create FB_SlmpReadPlcInfo
+- FB: FB_SlmpReadPlcInfo
+  source: src/SLMP_Function/FB_SlmpReadPlcInfo.st
+
+4.2) Create FB_SlmpCloseConnection
+- FB: FB_SlmpCloseConnection
+  source: src/SLMP_Function/FB_SlmpCloseConnection.st
+
+5) Create FB_SlmpWriteDevice
+- FB: FB_SlmpWriteDevice
+  source: src/SLMP_Function/FB_SlmpWriteDevice.st
+- Methods under FB_SlmpWriteDevice:
+  - BuildWritePayload (src/SLMP_Function/FB_SlmpWriteDevice.BuildWritePayload.st)
+  - BuildBitPayload   (src/SLMP_Function/FB_SlmpWriteDevice.BuildBitPayload.st)
+  - BuildWordPayload  (src/SLMP_Function/FB_SlmpWriteDevice.BuildWordPayload.st)
+
+6) Create FB_SlmpService
+- FB: FB_SlmpService
+  source: src/SLMP_Function/FB_SlmpService.st
+- Methods under FB_SlmpService:
+  - ReadWord  (src/SLMP_Function/FB_SlmpService.ReadWord.st)
+  - ReadBit   (src/SLMP_Function/FB_SlmpService.ReadBit.st)
+  - WriteWord (src/SLMP_Function/FB_SlmpService.WriteWord.st)
+  - WriteBit  (src/SLMP_Function/FB_SlmpService.WriteBit.st)
+  - ReadPlcInfo (src/SLMP_Function/FB_SlmpService.ReadPlcInfo.st)
+
+7) Create sample program
+- PLC_PRG
+  source: src/PLC_PRG_Example.st
+
+8) Important checks
+- Legacy objects are not used in this structure:
+  FB_SlmpReadDWord / FB_SlmpWriteDWord
+  (remove them from project to avoid ambiguous type/name errors)
+- Object name and declaration name must match exactly.
+- Keep method names exactly as listed above.
+
+9) Implementation marker rule
+- Insert `// === IMPLEMENTATION ===` between declaration and implementation.
+- If a file has `END_VAR`, place the marker immediately after `END_VAR`.
+- If a file has `END_TYPE`, do not insert the marker.
+- If a file has no `END_VAR` (for example simple function/method body style), place the marker near the top (after signature line).
+- Keep this marker style unified across all `src/SLMP_Function/*.st` and `src/PLC_PRG_Example.st`.
+
+10) Bit order consistency
+- Bit write payload order and bit read decode order are paired implementation.
+- If changing nibble/bit ordering, update both files together:
+  - `src/SLMP_Function/FB_SlmpWriteDevice.BuildBitPayload.st`
+  - `src/SLMP_Function/FB_SlmpReadDevice.DecodeBitArray.st`
